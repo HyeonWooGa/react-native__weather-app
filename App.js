@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { Fontisto } from "@expo/vector-icons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -18,6 +19,16 @@ export default function App() {
   const [ok, setOk] = useState(true);
 
   const API_KEY = "2f909706f44638b023e78b5daa4be66b";
+
+  const icons = {
+    Clouds: "cloudy",
+    Rain: "rain",
+    Clear: "day-sunny",
+    Atmosphere: "day-haze",
+    Snow: "snow",
+    Drizzle: "day-rain",
+    Thunderstorm: "lightning",
+  };
 
   const getWeather = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -70,8 +81,23 @@ export default function App() {
                 <Text style={styles.tinyText}>
                   {new Date(day.dt * 1000).toString().substring(0, 10)}
                 </Text>
-                <Text style={styles.temp}>{Math.round(day.temp.day)}</Text>
-                <Text style={styles.description}>{day.weather[0].main}</Text>
+                <Text style={styles.temp}>{Math.round(day.temp.day)}°</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Text style={styles.description}>{day.weather[0].main}</Text>
+                  <Fontisto
+                    name={icons[day.weather[0].main]}
+                    size={40}
+                    color="gray"
+                    style={{ marginTop: -16 }}
+                  />
+                </View>
                 <Text style={styles.tinyText}>
                   {day.weather[0].description}
                 </Text>
@@ -99,6 +125,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   temp: { color: "gray", marginTop: 50, fontSize: 178 },
-  description: { color: "gray", marginTop: -30, fontSize: 60 },
-  tinyText: { color: "gray", fontSize: 16 },
+  description: { color: "gray", marginTop: -30, fontSize: 40 },
+  tinyText: { color: "gray", fontSize: 16, marginTop: 10 },
 });
